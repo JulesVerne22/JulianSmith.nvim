@@ -187,6 +187,8 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
+      'JoosepAlviste/nvim-ts-context-commentstring',
+      'windwp/nvim-ts-autotag'
     },
     build = ':TSUpdate',
   },
@@ -240,8 +242,37 @@ require('lazy').setup({
     dependencies = { 'neovim/nvim-lspconfig', 'nvim-telescope/telescope.nvim' },
     config = true,
     event = "VeryLazy"
-  }
+  },
 
+  -- Autoclosing features
+  {
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    opts = {}
+  },
+
+  -- File tree
+  {
+    'nvim-tree/nvim-tree.lua',
+    version = "*",
+    lazy = false,
+    dependencies = {
+      'nvim-tree/nvim-web-devicons'
+    },
+    config = function()
+      require('nvim-tree').setup {
+        actions = {
+          open_file = {
+            quit_on_open = true
+          }
+        },
+        view = {
+          number = true,
+          relativenumber = true
+        },
+      }
+    end
+  },
 }, {})
 
 -- VIM GLOBALS
@@ -299,6 +330,9 @@ vim.o.incsearch = true
 vim.o.scrolloff = 8
 vim.o.colorcolumn = "80"
 
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_perl_provider = 0
+
 -- PLUGINS CONFIG
 -- [[ Basic Keymaps ]]
 
@@ -320,9 +354,15 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
+-- [[ Configure nvim-tree ]]
+-- vim.api.nvim_create_autocmd({ "VimEnter" }, {
+--   pattern = { "*" },
+--   command = ':silent! Explore'
+-- })
+
 -- [[ Condfigure trevj ]]
 wk.register({
-  ["<leader>lf"] = {
+  ["<leader>j"] = {
     function()
       require("trevj").format_at_cursor()
     end,
@@ -441,6 +481,11 @@ vim.keymap.set('n', '<leader>st', require('telescope.builtin').live_grep, { desc
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>se', '<cmd>Telescope emoji<CR>', { desc = '[S]earch [E]mojis' })
 
+-- [[ Configure Comment ]]
+require('Comment').setup {
+  pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+}
+
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
@@ -449,6 +494,13 @@ require('nvim-treesitter.configs').setup {
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
+  autotag = {
+    enable = true
+  },
+  context_commentstring = {
+    enable = true,
+    enable_autocmd = false
+  },
 
   highlight = { enable = true },
   indent = { enable = true },
@@ -552,7 +604,7 @@ local on_attach = function(_, bufnr)
   --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   -- end, '[W]orkspace [L]ist Folders')
 
-  nmap('<leader>lf', vim.lsp.buf.format(), 'Format Current Buffer')
+  nmap('<leader>lf', vim.lsp.buf.format, 'Format Current Buffer')
 
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
@@ -610,6 +662,7 @@ local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
+local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 
 cmp.setup {
   snippet = {
@@ -652,6 +705,11 @@ cmp.setup {
   },
 }
 
+cmp.event:on(
+  'confirm_done',
+  cmp_autopairs.on_confirm_done()
+)
+
 -- KEYMAPS
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
@@ -660,6 +718,9 @@ vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("n", "Q", "<nop>")
 
 wk.register({
+  e = { "<cmd>NvimTreeToggle<CR>", "Open File Tree" },
+  q = { "<cmd>q<CR>", "Quit" },
+  w = { "<cmd>w<CR>", "Save" },
   g = { name = "Git" },
   l = { name = "LSP" },
   s = { name = "Search" },
