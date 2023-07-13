@@ -160,7 +160,7 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim',         opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
   {
@@ -200,6 +200,48 @@ require('lazy').setup({
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
   -- { import = 'custom.plugins' },
+  -- Quickly switch between bookmarked buffers
+  { 'ThePrimeagen/harpoon' },
+
+  -- Add an emoji search to telescope
+  { 'xiyaowong/telescope-emoji.nvim' },
+
+  -- Persist sessions to return to later
+  {
+    'folke/persistence.nvim',
+    event = 'BufReadPre',
+    config = function()
+      require('persistence').setup {
+        dir = vim.fn.expand(vim.fn.stdpath 'config' .. '/session/'),
+        options = { 'buffers', 'curdir', 'tabpages', 'winsize' }
+      }
+    end
+  },
+
+  -- Reordering of long lines
+  {
+    'AckslD/nvim-trevj.lua',
+    config = function()
+      require("trevj").setup()
+    end
+  },
+
+  -- Markdown preview
+  {
+    'iamcco/markdown-preview.nvim',
+    build = function()
+      vim.fn["mkdp#util#install"]()
+    end
+  },
+
+  -- Virtual Environment selector for python
+  {
+    'linux-cultist/venv-selector.nvim',
+    dependencies = { 'neovim/nvim-lspconfig', 'nvim-telescope/telescope.nvim' },
+    config = true,
+    event = "VeryLazy"
+  }
+
 }, {})
 
 -- VIM GLOBALS
@@ -260,6 +302,9 @@ vim.o.colorcolumn = "80"
 -- PLUGINS CONFIG
 -- [[ Basic Keymaps ]]
 
+-- set which-key variable for all future bindings
+local wk = require("which-key")
+
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
@@ -274,6 +319,52 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = highlight_group,
   pattern = '*',
 })
+
+-- [[ Condfigure trevj ]]
+wk.register({
+  ["<leader>lf"] = {
+    function()
+      require("trevj").format_at_cursor()
+    end,
+    "Create Line Breaks"
+  }
+})
+
+-- [[ Configure harpoon ]]
+local mark = require("harpoon.mark")
+local ui = require("harpoon.ui")
+
+wk.register({
+  ["<leader>h"] = {
+    name = "Harpoon/Highlighting",
+    a = { mark.add_file, "Add File to Harpoon" },
+    e = { ui.toggle_quick_menu, "Harpoon Explorer" },
+    h = { "<cmd>noh<CR>", "Remove Highlighting" }
+  }
+})
+
+vim.keymap.set("n", "<C-h>", function() ui.nav_file(1) end)
+vim.keymap.set("n", "<C-t>", function() ui.nav_file(2) end)
+
+-- [[ Configure markdown-preview ]]
+wk.register({
+  m = {
+    name = "Markdown",
+    p = { "<Plug>MarkdownPreview", "Markdown Preview" },
+    s = { "<Plug>MarkdownPreviewStop", "Markdown Preview Stop" }
+  }
+}, { prefix = "<leader>" })
+
+-- [[ Configure persistence ]]
+wk.register({
+  S = {
+    name = "Sessions",
+    c = { "<cmd>lua require('persistence').load()<cr>", "Restore last session for current dir" },
+    l = { "<cmd>lua require('persistence').load({ last = true })<cr>", "Restore last session" },
+    q = { "<cmd>qa<cr>", "Quit with saving" },
+    Q = { "<cmd>lua require('persistence').stop()<cr>", "Quit without saving session" }
+  }
+}, { prefix = "<leader>" })
 
 -- [[ Configure ToggleTerm ]]
 function _G.set_terminal_keymaps()
@@ -329,6 +420,7 @@ require('telescope').setup {
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
+pcall(require('telescope').load_extension, 'emoji')
 
 -- See `:help telescope.builtin`
 -- vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
@@ -347,6 +439,7 @@ vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { des
 -- vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>st', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+vim.keymap.set('n', '<leader>se', '<cmd>Telescope emoji<CR>', { desc = '[S]earch [E]mojis' })
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -565,8 +658,6 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("n", "Q", "<nop>")
-
-local wk = require("which-key")
 
 wk.register({
   g = { name = "Git" },
