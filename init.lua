@@ -273,6 +273,13 @@ require('lazy').setup({
       }
     end
   },
+
+  -- Beautify Tabs
+  {
+    'akinsho/bufferline.nvim',
+    version = "*",
+    dependencies = 'nvim-tree/nvim-web-devicons'
+  },
 }, {})
 
 -- VIM GLOBALS
@@ -354,6 +361,22 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
+-- [[ Configure bufferline ]]
+require("bufferline").setup {}
+
+wk.register({
+  b = {
+    name = "Buffer",
+    b = { "<cmd>BufferLineCyclePrev<CR>", "Previous Tab" },
+    n = { "<cmd>BufferLineCycleNext<CR>", "Next Tab" },
+    j = { "<cmd>BufferLinePick<CR>", "Jump to Buffer" },
+    o = { "<cmd>BufferLineCloseLeft<CR><cmd>BufferLineCloseRight<CR>", "Close All Other Tabs" },
+    v = { "<C-w>v", "Split Vertical" },
+    h = { "<C-w>s", "Split Horizontal" }
+  },
+  c = { "<cmd>bdelete! %<CR>", "Close Tab" }
+}, { prefix = "<leader>" })
+
 -- [[ Configure nvim-tree ]]
 -- vim.api.nvim_create_autocmd({ "VimEnter" }, {
 --   pattern = { "*" },
@@ -406,15 +429,13 @@ wk.register({
   }
 }, { prefix = "<leader>" })
 
+-- [[ Configure NvimTree ]]
+vim.api.nvim_set_keymap("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Open File Tree" })
+
 -- [[ Configure ToggleTerm ]]
 function _G.set_terminal_keymaps()
   local opts = { buffer = 0 }
-  vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
-  vim.keymap.set('t', '<C-[>', [[<C-\><C-n>]], opts)
-  vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
-  vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
-  vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
-  vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
+  vim.keymap.set('t', '<C-]', [[<C-\><C-n>]], opts)
   vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
 end
 
@@ -424,26 +445,32 @@ local Terminal = require('toggleterm.terminal').Terminal
 
 local lazygit  = Terminal:new({
   cmd = "lazygit",
+  hidden = true,
   dir = "git_dir",
   direction = "float",
   float_opts = {
-    border = "double",
+    border = "none",
+    width = 100000,
+    height = 100000
   },
   on_open = function(term)
     vim.cmd("startinsert!")
-    vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
   end,
   -- function to run on closing the terminal
   on_close = function()
-    vim.cmd("startinsert!")
   end,
+  count = 99
 })
 
 function Lazygit_toggle()
   lazygit:toggle()
 end
 
-vim.api.nvim_set_keymap("n", "<leader>gg", "<cmd>lua Lazygit_toggle()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>gg", "<cmd>lua Lazygit_toggle()<CR>",
+  { desc = "Lazygit", noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<M-1>", "<cmd>ToggleTerm direction=horizontal<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<M-2>", "<cmd>ToggleTerm direction=vertical<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<M-3>", "<cmd>ToggleTerm direction=float<CR>", { noremap = true, silent = true })
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
@@ -716,9 +743,12 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("n", "Q", "<nop>")
+vim.keymap.set("n", "<M-j>", "<cmd>m+<CR>==")
+vim.keymap.set("n", "<M-k>", "<cmd>m-2<CR>==")
+vim.keymap.set("v", "<M-j>", ":'<,'>m '>+1<CR>gv=gv")
+vim.keymap.set("v", "<M-k>", ":'<,'>m '<-2<CR>gv=gv")
 
 wk.register({
-  e = { "<cmd>NvimTreeToggle<CR>", "Open File Tree" },
   q = { "<cmd>q<CR>", "Quit" },
   w = { "<cmd>w<CR>", "Save" },
   g = { name = "Git" },
@@ -736,7 +766,7 @@ wk.register({
     Y = { "\"+Y", "System Yank Entire Line" }
   },
   v = { "\"_d", "Void Delete" },
-  x = { "<cmd>!chmod +x %<CR>", "Make Executable" }
+  x = { "<cmd>!chmod +x %<CR>", "Make Executable" },
 }, { prefix = "<leader>" })
 
 wk.register({
