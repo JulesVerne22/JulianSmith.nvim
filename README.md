@@ -4,6 +4,30 @@
 
 A NeoVim repo for perstisting my config.
 
+### Pre-Requisites
+
+* Install the following programs:
+  - Go
+  - Ruby
+  - PHP
+  - luarocks
+  - nvm
+  - Node
+  - Cargo
+  - Composer
+  - Julia
+  - Python3
+  - Pip3
+  - Java
+
+* Install pynvim using ```pip3 install pynvim==0.4.3```
+
+* Install neovim on npm using ```npm install -g neovim```
+
+* Install ripgrep for your specific OS
+
+* Possibly install tree-sitter-cli with ```cargo install tree-sitter-cli```
+
 ### Installation
 
 * From a terminal cd/dir to:
