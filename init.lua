@@ -336,6 +336,10 @@ vim.o.wrap = false
 vim.o.incsearch = true
 vim.o.scrolloff = 8
 vim.o.colorcolumn = "80"
+vim.o.tabstop = 4
+vim.o.softtabstop = 4
+vim.o.shiftwidth = 4
+vim.o.expandtab = true
 
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0

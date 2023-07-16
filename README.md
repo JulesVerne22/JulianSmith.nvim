@@ -26,6 +26,8 @@ A NeoVim repo for perstisting my config.
 
 * Install ripgrep for your specific OS
 
+* Install lazygit for your specific OS
+
 * Possibly install tree-sitter-cli with ```cargo install tree-sitter-cli```
 
 ### Installation
