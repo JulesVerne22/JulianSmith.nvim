@@ -472,9 +472,9 @@ end
 
 vim.api.nvim_set_keymap("n", "<leader>gg", "<cmd>lua Lazygit_toggle()<CR>",
   { desc = "Lazygit", noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<M-1>", "<cmd>ToggleTerm direction=horizontal<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<M-2>", "<cmd>ToggleTerm direction=vertical<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<M-3>", "<cmd>ToggleTerm direction=float<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<M-1>", "<cmd>ToggleTerm 1 direction=horizontal<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<M-2>", "<cmd>ToggleTerm 2 direction=vertical<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<M-3>", "<cmd>ToggleTerm 3 direction=float<CR>", { noremap = true, silent = true })
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
