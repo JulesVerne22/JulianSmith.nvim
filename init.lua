@@ -280,6 +280,12 @@ require('lazy').setup({
     version = "*",
     dependencies = 'nvim-tree/nvim-web-devicons'
   },
+
+  -- Extend LSP with formatters and linters
+  {
+    'JulesVerne22/null-ls.nvim',
+    dependencies = 'nvim-lua/plenary.nvim'
+  },
 }, {})
 
 -- VIM GLOBALS
@@ -363,6 +369,23 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
   group = highlight_group,
   pattern = '*',
+})
+
+-- [[ Configure null-ls ]]
+local null_ls = require('null-ls')
+null_ls.setup({
+  sources = {
+    null_ls.builtins.diagnostics.eslint_d,
+    null_ls.builtins.diagnostics.flake8.with({
+      extra_args = { "--extend-ignore", "E501"}
+    }),
+    null_ls.builtins.formatting.black.with({
+      extra_args = { "--fast" }
+    }),
+    null_ls.builtins.formatting.gofumpt,
+    null_ls.builtins.formatting.prettier,
+    null_ls.builtins.formatting.stylua
+  }
 })
 
 -- [[ Configure bufferline ]]
