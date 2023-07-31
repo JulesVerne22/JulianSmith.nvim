@@ -33,16 +33,16 @@ require('lazy').setup({
   -- Terminal based LazyGit
   {
     'akinsho/toggleterm.nvim',
-    version = "*",
+    version = '*',
     config = function()
       require('toggleterm').setup {
-        open_mapping = [[<C-\>]]
+        open_mapping = [[<C-\>]],
       }
-    end
+    end,
   },
 
   -- Detect tabstop and shiftwidth automatically
-  'tpope/vim-sleuth',
+  -- 'tpope/vim-sleuth',
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
@@ -93,14 +93,14 @@ require('lazy').setup({
           windows = false,
           nav = false,
           z = false,
-          g = false
-        }
+          g = false,
+        },
       },
       layout = {
         height = { min = 4, max = 10 },
-        align = "center"
-      }
-    }
+        align = 'center',
+      },
+    },
   },
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
@@ -126,11 +126,11 @@ require('lazy').setup({
     -- Theme inspired by Atom
     'bluz71/vim-moonfly-colors',
     priority = 1000,
-    name = "moonfly",
+    name = 'moonfly',
     lazy = false,
     config = function()
       vim.cmd.colorscheme 'moonfly'
-      vim.cmd('hi normal guibg=none ctermbg=none')
+      vim.cmd 'hi normal guibg=none ctermbg=none'
     end,
   },
 
@@ -166,7 +166,7 @@ require('lazy').setup({
   {
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
-    dependencies = { 'nvim-lua/plenary.nvim' }
+    dependencies = { 'nvim-lua/plenary.nvim' },
   },
 
   -- Fuzzy Finder Algorithm which requires local dependencies to be built.
@@ -188,7 +188,7 @@ require('lazy').setup({
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
       'JoosepAlviste/nvim-ts-context-commentstring',
-      'windwp/nvim-ts-autotag'
+      'windwp/nvim-ts-autotag',
     },
     build = ':TSUpdate',
   },
@@ -215,25 +215,25 @@ require('lazy').setup({
     config = function()
       require('persistence').setup {
         dir = vim.fn.expand(vim.fn.stdpath 'config' .. '/session/'),
-        options = { 'buffers', 'curdir', 'tabpages', 'winsize' }
+        options = { 'buffers', 'curdir', 'tabpages', 'winsize' },
       }
-    end
+    end,
   },
 
   -- Reordering of long lines
   {
     'AckslD/nvim-trevj.lua',
     config = function()
-      require("trevj").setup()
-    end
+      require('trevj').setup()
+    end,
   },
 
   -- Markdown preview
   {
     'iamcco/markdown-preview.nvim',
     build = function()
-      vim.fn["mkdp#util#install"]()
-    end
+      vim.fn['mkdp#util#install']()
+    end,
   },
 
   -- Virtual Environment selector for python
@@ -241,50 +241,80 @@ require('lazy').setup({
     'linux-cultist/venv-selector.nvim',
     dependencies = { 'neovim/nvim-lspconfig', 'nvim-telescope/telescope.nvim' },
     config = true,
-    event = "VeryLazy"
+    event = 'VeryLazy',
   },
 
   -- Autoclosing features
   {
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
-    opts = {}
+    opts = {},
   },
 
   -- File tree
   {
     'nvim-tree/nvim-tree.lua',
-    version = "*",
+    version = '*',
     lazy = false,
     dependencies = {
-      'nvim-tree/nvim-web-devicons'
+      'nvim-tree/nvim-web-devicons',
     },
     config = function()
       require('nvim-tree').setup {
         actions = {
           open_file = {
-            quit_on_open = true
-          }
+            quit_on_open = true,
+          },
         },
         view = {
           number = true,
-          relativenumber = true
+          relativenumber = true,
         },
       }
-    end
+    end,
   },
 
   -- Beautify Tabs
   {
     'akinsho/bufferline.nvim',
-    version = "*",
-    dependencies = 'nvim-tree/nvim-web-devicons'
+    version = '*',
+    dependencies = 'nvim-tree/nvim-web-devicons',
   },
 
   -- Extend LSP with formatters and linters
   {
     'JulesVerne22/null-ls.nvim',
-    dependencies = 'nvim-lua/plenary.nvim'
+    dependencies = 'nvim-lua/plenary.nvim',
+  },
+
+  -- Adding debugger
+  {
+    'mfussenegger/nvim-dap',
+  },
+  {
+    'rcarriga/nvim-dap-ui',
+    dependencies = 'mfussenegger/nvim-dap',
+    config = function(_, opts)
+      require('dapui').setup(opts)
+    end,
+  },
+  {
+    'leoluz/nvim-dap-go',
+    ft = 'go',
+    dependencies = 'mfussenegger/nvim-dap',
+    config = function(_, opts)
+      require('dap-go').setup(opts)
+    end,
+  },
+  {
+    'jay-babu/mason-nvim-dap.nvim',
+    dependencies = {
+      'williamboman/mason.nvim',
+      'mfussenegger/nvim-dap'
+    },
+    opts = {
+      handlers = {}
+    }
   },
 }, {})
 
@@ -314,7 +344,7 @@ vim.o.breakindent = true
 -- Save undo history
 vim.o.swapfile = false
 vim.o.backup = false
-vim.o.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.o.undodir = os.getenv 'HOME' .. '/.vim/undodir'
 vim.o.undofile = true
 
 -- Case-insensitive searching UNLESS \C or capital in search
@@ -336,12 +366,12 @@ vim.o.pumheight = 10
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
-vim.o.guicursor = ""
+vim.o.guicursor = ''
 vim.o.smartindent = true
 vim.o.wrap = false
 vim.o.incsearch = true
 vim.o.scrolloff = 8
-vim.o.colorcolumn = "80"
+vim.o.colorcolumn = '80'
 vim.o.tabstop = 4
 vim.o.softtabstop = 4
 vim.o.shiftwidth = 4
@@ -354,7 +384,7 @@ vim.g.loaded_perl_provider = 0
 -- [[ Basic Keymaps ]]
 
 -- set which-key variable for all future bindings
-local wk = require("which-key")
+local wk = require 'which-key'
 
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
@@ -371,38 +401,78 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
+-- [[ Configure Debugger ]]
+wk.register {
+  ['<leader>d'] = {
+    name = 'Debug',
+    c = { '<cmd>DapContinue<CR>', 'Continue' },
+    o = { '<cmd>DapStepOver<CR>', 'Step Over' },
+    l = { '<cmd>DapStepInto<CR>', 'Step Into' },
+    h = { '<cmd>DapStepOut<CR>', 'Step Out' },
+    b = { '<cmd>DapToggleBreakpoint<CR>', 'Toggle Breakpoint' },
+    r = { '<cmd>DapToggleRepl<CR>', 'REPL' },
+    g = {
+      function()
+        require('dap-go').debug_test()
+      end,
+      'Debug Go Test',
+    },
+    q = { '<cmd>DapTerminate<CR>', 'Quit Debugger' },
+    s = {
+      function()
+        require('dapui').toggle()
+      end,
+      'Toggle Debug Window',
+    },
+  },
+}
+
+local dap, dapui = require 'dap', require 'dapui'
+dap.listeners.after.event_initialized['dapui_config'] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated['dapui_config'] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited['dapui_config'] = function()
+  dapui.close()
+end
+
 -- [[ Configure null-ls ]]
-local null_ls = require('null-ls')
-null_ls.setup({
+local null_ls = require 'null-ls'
+null_ls.setup {
   sources = {
     null_ls.builtins.diagnostics.eslint_d,
-    null_ls.builtins.diagnostics.flake8.with({
-      extra_args = { "--extend-ignore", "E501"}
-    }),
-    null_ls.builtins.formatting.black.with({
-      extra_args = { "--fast" }
-    }),
+    null_ls.builtins.diagnostics.flake8.with {
+      extra_args = { '--extend-ignore', 'E501' },
+    },
+    null_ls.builtins.formatting.black.with {
+      extra_args = { '--fast' },
+    },
     null_ls.builtins.formatting.gofumpt,
     null_ls.builtins.formatting.prettier,
-    null_ls.builtins.formatting.stylua
-  }
-})
+    null_ls.builtins.formatting.stylua,
+    null_ls.builtins.formatting.clang_format.with {
+      extra_args = { '--style="{BasedOnStyle: llvm, IndentWidth: 4, TabWidth: 4}"' }
+    },
+  },
+}
 
 -- [[ Configure bufferline ]]
-require("bufferline").setup {}
+require('bufferline').setup {}
 
 wk.register({
   b = {
-    name = "Buffer",
-    b = { "<cmd>BufferLineCyclePrev<CR>", "Previous Tab" },
-    n = { "<cmd>BufferLineCycleNext<CR>", "Next Tab" },
-    j = { "<cmd>BufferLinePick<CR>", "Jump to Buffer" },
-    o = { "<cmd>BufferLineCloseLeft<CR><cmd>BufferLineCloseRight<CR>", "Close All Other Tabs" },
-    v = { "<C-w>v", "Split Vertical" },
-    h = { "<C-w>s", "Split Horizontal" }
+    name = 'Buffer',
+    b = { '<cmd>BufferLineCyclePrev<CR>', 'Previous Tab' },
+    n = { '<cmd>BufferLineCycleNext<CR>', 'Next Tab' },
+    j = { '<cmd>BufferLinePick<CR>', 'Jump to Buffer' },
+    o = { '<cmd>BufferLineCloseLeft<CR><cmd>BufferLineCloseRight<CR>', 'Close All Other Tabs' },
+    v = { '<C-w>v', 'Split Vertical' },
+    h = { '<C-w>s', 'Split Horizontal' },
   },
-  c = { "<cmd>bdelete! %<CR>", "Close Tab" }
-}, { prefix = "<leader>" })
+  c = { '<cmd>bdelete! %<CR>', 'Close Tab' },
+}, { prefix = '<leader>' })
 
 -- [[ Configure nvim-tree ]]
 -- vim.api.nvim_create_autocmd({ "VimEnter" }, {
@@ -411,53 +481,57 @@ wk.register({
 -- })
 
 -- [[ Condfigure trevj ]]
-wk.register({
-  ["<leader>j"] = {
+wk.register {
+  ['<leader>j'] = {
     function()
-      require("trevj").format_at_cursor()
+      require('trevj').format_at_cursor()
     end,
-    "Create Line Breaks"
-  }
-})
+    'Create Line Breaks',
+  },
+}
 
 -- [[ Configure harpoon ]]
-local mark = require("harpoon.mark")
-local ui = require("harpoon.ui")
+local mark = require 'harpoon.mark'
+local ui = require 'harpoon.ui'
 
-wk.register({
-  ["<leader>h"] = {
-    name = "Harpoon/Highlighting",
-    a = { mark.add_file, "Add File to Harpoon" },
-    e = { ui.toggle_quick_menu, "Harpoon Explorer" },
-    h = { "<cmd>noh<CR>", "Remove Highlighting" }
-  }
-})
+wk.register {
+  ['<leader>h'] = {
+    name = 'Harpoon/Highlighting',
+    a = { mark.add_file, 'Add File to Harpoon' },
+    e = { ui.toggle_quick_menu, 'Harpoon Explorer' },
+    h = { '<cmd>noh<CR>', 'Remove Highlighting' },
+  },
+}
 
-vim.keymap.set("n", "<C-h>", function() ui.nav_file(1) end)
-vim.keymap.set("n", "<C-t>", function() ui.nav_file(2) end)
+vim.keymap.set('n', '<C-h>', function()
+  ui.nav_file(1)
+end)
+vim.keymap.set('n', '<C-t>', function()
+  ui.nav_file(2)
+end)
 
 -- [[ Configure markdown-preview ]]
 wk.register({
   m = {
-    name = "Markdown",
-    p = { "<Plug>MarkdownPreview", "Markdown Preview" },
-    s = { "<Plug>MarkdownPreviewStop", "Markdown Preview Stop" }
-  }
-}, { prefix = "<leader>" })
+    name = 'Markdown',
+    p = { '<Plug>MarkdownPreview', 'Markdown Preview' },
+    s = { '<Plug>MarkdownPreviewStop', 'Markdown Preview Stop' },
+  },
+}, { prefix = '<leader>' })
 
 -- [[ Configure persistence ]]
 wk.register({
   S = {
-    name = "Sessions",
-    c = { "<cmd>lua require('persistence').load()<cr>", "Restore last session for current dir" },
-    l = { "<cmd>lua require('persistence').load({ last = true })<cr>", "Restore last session" },
-    q = { "<cmd>qa<cr>", "Quit with saving" },
-    Q = { "<cmd>lua require('persistence').stop()<cr>", "Quit without saving session" }
-  }
-}, { prefix = "<leader>" })
+    name = 'Sessions',
+    c = { "<cmd>lua require('persistence').load()<cr>", 'Restore last session for current dir' },
+    l = { "<cmd>lua require('persistence').load({ last = true })<cr>", 'Restore last session' },
+    q = { '<cmd>qa<cr>', 'Quit with saving' },
+    Q = { "<cmd>lua require('persistence').stop()<cr>", 'Quit without saving session' },
+  },
+}, { prefix = '<leader>' })
 
 -- [[ Configure NvimTree ]]
-vim.api.nvim_set_keymap("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Open File Tree" })
+vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', { desc = 'Open File Tree' })
 
 -- [[ Configure ToggleTerm ]]
 function _G.set_terminal_keymaps()
@@ -466,38 +540,37 @@ function _G.set_terminal_keymaps()
   vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
 end
 
-vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
 
 local Terminal = require('toggleterm.terminal').Terminal
 
-local lazygit  = Terminal:new({
-  cmd = "lazygit",
+local lazygit = Terminal:new {
+  cmd = 'lazygit',
   hidden = true,
-  dir = "git_dir",
-  direction = "float",
+  dir = 'git_dir',
+  direction = 'float',
   float_opts = {
-    border = "none",
+    border = 'none',
     width = 100000,
-    height = 100000
+    height = 100000,
   },
-  on_open = function(term)
-    vim.cmd("startinsert!")
+  on_open = function()
+    vim.cmd 'startinsert!'
   end,
   -- function to run on closing the terminal
-  on_close = function()
-  end,
-  count = 99
-})
+  on_close = function() end,
+  count = 99,
+}
 
 function Lazygit_toggle()
   lazygit:toggle()
 end
 
-vim.api.nvim_set_keymap("n", "<leader>gg", "<cmd>lua Lazygit_toggle()<CR>",
-  { desc = "Lazygit", noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<M-1>", "<cmd>ToggleTerm 1 direction=horizontal<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<M-2>", "<cmd>ToggleTerm 2 direction=vertical<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<M-3>", "<cmd>ToggleTerm 3 direction=float<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>gg', '<cmd>lua Lazygit_toggle()<CR>',
+  { desc = 'Lazygit', noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-1>', '<cmd>ToggleTerm 1 direction=horizontal<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-2>', '<cmd>ToggleTerm 2 direction=vertical<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-3>', '<cmd>ToggleTerm 3 direction=float<CR>', { noremap = true, silent = true })
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
@@ -549,11 +622,11 @@ require('nvim-treesitter.configs').setup {
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
   autotag = {
-    enable = true
+    enable = true,
   },
   context_commentstring = {
     enable = true,
-    enable_autocmd = false
+    enable_autocmd = false,
   },
 
   highlight = { enable = true },
@@ -687,7 +760,9 @@ local servers = {
 }
 
 -- Setup neovim lua configuration
-require('neodev').setup()
+require('neodev').setup {
+  library = { plugins = { 'nvim-dap-ui' }, types = true },
+}
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -710,13 +785,20 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
+require("mason-nvim-dap").setup({
+  ensure_installed = {
+    "delve",
+    "codelldb"
+  }
+})
+
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
-local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
 
 cmp.setup {
   snippet = {
@@ -759,56 +841,54 @@ cmp.setup {
   },
 }
 
-cmp.event:on(
-  'confirm_done',
-  cmp_autopairs.on_confirm_done()
-)
+cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
 
 -- KEYMAPS
-vim.keymap.set("n", "<C-d>", "<C-d>zz")
-vim.keymap.set("n", "<C-u>", "<C-u>zz")
-vim.keymap.set("n", "n", "nzzzv")
-vim.keymap.set("n", "N", "Nzzzv")
-vim.keymap.set("n", "Q", "<nop>")
-vim.keymap.set("n", "<M-j>", "<cmd>m+<CR>==")
-vim.keymap.set("n", "<M-k>", "<cmd>m-2<CR>==")
-vim.keymap.set("v", "<M-j>", ":'<,'>m '>+1<CR>gv=gv")
-vim.keymap.set("v", "<M-k>", ":'<,'>m '<-2<CR>gv=gv")
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')
+vim.keymap.set('n', 'Q', '<nop>')
+vim.keymap.set('n', '<M-j>', '<cmd>m+<CR>==')
+vim.keymap.set('n', '<M-k>', '<cmd>m-2<CR>==')
+vim.keymap.set('v', '<M-j>', ":'<,'>m '>+1<CR>gv=gv")
+vim.keymap.set('v', '<M-k>', ":'<,'>m '<-2<CR>gv=gv")
 
 wk.register({
-  q = { "<cmd>q<CR>", "Quit" },
-  w = { "<cmd>w<CR>", "Save" },
-  g = { name = "Git" },
-  l = { name = "LSP" },
-  s = { name = "Search" },
+  q = { '<cmd>q<CR>', 'Quit' },
+  w = { '<cmd>w<CR>', 'Save' },
+  g = { name = 'Git' },
+  l = { name = 'LSP' },
+  r = { '<cmd>edit<CR>', 'Refresh File'},
+  s = { name = 'Search' },
   p = {
-    name = "System Paste",
-    p = { "\"+p", "System Paste Below" },
-    P = { "\"+P", "System Paste Above" },
-    v = { "<cmd>Ex<CR>", "View Files" }
+    name = 'System Paste',
+    p = { '"+p', 'System Paste Below' },
+    P = { '"+P', 'System Paste Above' },
+    v = { '<cmd>Ex<CR>', 'View Files' },
   },
   y = {
-    name = "System Yank",
-    y = { "\"+y", "System Yank" },
-    Y = { "\"+Y", "System Yank Entire Line" }
+    name = 'System Yank',
+    y = { '"+y', 'System Yank' },
+    Y = { '"+Y', 'System Yank Entire Line' },
   },
-  v = { "\"_d", "Void Delete" },
-  x = { "<cmd>!chmod +x %<CR>", "Make Executable" },
-}, { prefix = "<leader>" })
+  v = { '"_d', 'Void Delete' },
+  x = { '<cmd>!chmod +x %<CR>', 'Make Executable' },
+}, { prefix = '<leader>' })
 
 wk.register({
   p = {
-    name = "System Paste",
-    d = { "\"_dP", "Delete to Void Paste", mode = "x" },
-    mode = "x"
+    name = 'System Paste',
+    d = { '"_dP', 'Delete to Void Paste', mode = 'x' },
+    mode = 'x',
   },
   y = {
-    name = "System Yank",
-    y = { "\"+y", "System Yank" },
-    mode = "v"
+    name = 'System Yank',
+    y = { '"+y', 'System Yank' },
+    mode = 'v',
   },
-  v = { "\"_d", "Void Delete", mode = "v" }
-}, { prefix = "<leader>" })
+  v = { '"_d', 'Void Delete', mode = 'v' },
+}, { prefix = '<leader>' })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
