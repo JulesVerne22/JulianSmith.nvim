@@ -30,6 +30,8 @@ A NeoVim repo for perstisting my config.
 
 * Possibly install tree-sitter-cli with ```cargo install tree-sitter-cli```
 
+* If on Linux use ```sudo apt install python3.10-venv``` to install formatters
+
 ### Installation
 
 * From a terminal cd/dir to:
