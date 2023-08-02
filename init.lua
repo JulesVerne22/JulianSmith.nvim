@@ -864,11 +864,11 @@ wk.register({
   k = {
     name = 'Code Actions',
     c = {
-      "<cmd>silent !clang++ -W -std=c++14 -o %:p:h/app %<CR>",
+      "<cmd>silent !clang++ -Weverything -std=c++14 -o %:p:h/app %<CR>",
       "Compile C++"
     },
     d = {
-      "<cmd>silent !clang++ -W -std=c++14 -g -o %:p:h/app %<CR>",
+      "<cmd>silent !clang++ -Weverything -std=c++14 -g -o %:p:h/app %<CR>",
       "Compile C++"
     },
   },
