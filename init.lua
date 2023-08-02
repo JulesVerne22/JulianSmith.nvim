@@ -867,6 +867,10 @@ wk.register({
       "<cmd>silent !clang++ -W -std=c++14 -o %:p:h/app %<CR>",
       "Compile C++"
     },
+    d = {
+      "<cmd>silent !clang++ -W -std=c++14 -g -o %:p:h/app %<CR>",
+      "Compile C++"
+    },
   },
   p = {
     name = 'System Paste',
