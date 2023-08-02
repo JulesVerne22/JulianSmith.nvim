@@ -861,6 +861,10 @@ wk.register({
   l = { name = 'LSP' },
   r = { '<cmd>edit<CR>', 'Refresh File'},
   s = { name = 'Search' },
+  k = {
+    name = 'Code Actions',
+    c = { "<cmd>!clang++ -W -std=c++14 -o app %<CR>", "Compile C++" },
+  },
   p = {
     name = 'System Paste',
     p = { '"+p', 'System Paste Below' },
