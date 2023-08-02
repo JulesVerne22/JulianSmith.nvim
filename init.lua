@@ -863,7 +863,10 @@ wk.register({
   s = { name = 'Search' },
   k = {
     name = 'Code Actions',
-    c = { "<cmd>!clang++ -W -std=c++14 -o app %<CR>", "Compile C++" },
+    c = {
+      "<cmd>silent !clang++ -W -std=c++14 -o %:p:h/app %<CR>",
+      "Compile C++"
+    },
   },
   p = {
     name = 'System Paste',
