@@ -568,9 +568,9 @@ end
 
 vim.api.nvim_set_keymap('n', '<leader>gg', '<cmd>lua Lazygit_toggle()<CR>',
   { desc = 'Lazygit', noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-1>', '<cmd>ToggleTerm 1 direction=horizontal<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-2>', '<cmd>ToggleTerm 2 direction=vertical<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-3>', '<cmd>ToggleTerm 3 direction=float<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-1>', '<cmd>ToggleTerm 1 direction=horizontal dir=%:p:h<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-2>', '<cmd>ToggleTerm 2 direction=vertical dir=%:p:h<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-3>', '<cmd>ToggleTerm 3 direction=float dir=%:p:h<CR>', { noremap = true, silent = true })
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
@@ -869,7 +869,7 @@ wk.register({
     },
     d = {
       "<cmd>silent !clang++ -Weverything -std=c++14 -g -o %:p:h/app %<CR>",
-      "Compile C++"
+      "Compile C++ Debug"
     },
   },
   p = {
