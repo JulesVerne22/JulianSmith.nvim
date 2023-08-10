@@ -439,6 +439,15 @@ dap.listeners.before.event_exited['dapui_config'] = function()
 end
 
 -- [[ Configure null-ls ]]
+
+-- Disable tsserver formatting
+require("lspconfig").tsserver.setup({
+    capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
+    on_attach = function(client)
+        client.resolved_capabilities.document_formatting = false
+    end,
+})
+
 local null_ls = require 'null-ls'
 null_ls.setup {
   sources = {
@@ -451,6 +460,7 @@ null_ls.setup {
     },
     null_ls.builtins.formatting.gofumpt,
     null_ls.builtins.formatting.prettier,
+    null_ls.builtins.formatting.eslint_d,
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.clang_format.with {
       extra_args = { '--style="{BasedOnStyle: llvm, IndentWidth: 4, TabWidth: 4}"' }
@@ -900,6 +910,15 @@ wk.register({
   },
   v = { '"_d', 'Void Delete', mode = 'v' },
 }, { prefix = '<leader>' })
+
+-- CLEAN UP --
+--------------
+vim.api
+.
+nvim_create_autocmd({"VimLeavePre"}, {
+  pattern = {"*"},
+  command = "!eslint_d stop",
+})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
