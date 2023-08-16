@@ -310,11 +310,11 @@ require('lazy').setup({
     'jay-babu/mason-nvim-dap.nvim',
     dependencies = {
       'williamboman/mason.nvim',
-      'mfussenegger/nvim-dap'
+      'mfussenegger/nvim-dap',
     },
     opts = {
-      handlers = {}
-    }
+      handlers = {},
+    },
   },
 }, {})
 
@@ -441,12 +441,12 @@ end
 -- [[ Configure null-ls ]]
 
 -- Disable tsserver formatting
-require("lspconfig").tsserver.setup({
-    capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
-    on_attach = function(client)
-        client.resolved_capabilities.document_formatting = false
-    end,
-})
+require('lspconfig').tsserver.setup {
+  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities()),
+  on_attach = function(client)
+    client.resolved_capabilities.document_formatting = false
+  end,
+}
 
 local null_ls = require 'null-ls'
 null_ls.setup {
@@ -463,7 +463,7 @@ null_ls.setup {
     null_ls.builtins.formatting.eslint_d,
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.clang_format.with {
-      extra_args = { '--style="{BasedOnStyle: llvm, IndentWidth: 4, TabWidth: 4}"' }
+      extra_args = { '--style="{BasedOnStyle: llvm, IndentWidth: 4, TabWidth: 4}"' },
     },
   },
 }
@@ -550,7 +550,7 @@ function _G.set_terminal_keymaps()
   vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
 end
 
-vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
 
 local Terminal = require('toggleterm.terminal').Terminal
 
@@ -578,9 +578,12 @@ end
 
 vim.api.nvim_set_keymap('n', '<leader>gg', '<cmd>lua Lazygit_toggle()<CR>',
   { desc = 'Lazygit', noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-1>', '<cmd>ToggleTerm 1 direction=horizontal dir=%:p:h<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-2>', '<cmd>ToggleTerm 2 direction=vertical dir=%:p:h<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-3>', '<cmd>ToggleTerm 3 direction=float dir=%:p:h<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-1>', '<cmd>ToggleTerm 1 direction=horizontal dir=%:p:h<CR>',
+  { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-2>', '<cmd>ToggleTerm 2 direction=vertical dir=%:p:h<CR>',
+  { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-3>', '<cmd>ToggleTerm 3 direction=float dir=%:p:h<CR>',
+  { noremap = true, silent = true })
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
@@ -795,12 +798,12 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
-require("mason-nvim-dap").setup({
+require('mason-nvim-dap').setup {
   ensure_installed = {
-    "delve",
-    "codelldb"
-  }
-})
+    'delve',
+    'codelldb',
+  },
+}
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
@@ -863,23 +866,30 @@ vim.keymap.set('n', '<M-j>', '<cmd>m+<CR>==')
 vim.keymap.set('n', '<M-k>', '<cmd>m-2<CR>==')
 vim.keymap.set('v', '<M-j>', ":'<,'>m '>+1<CR>gv=gv")
 vim.keymap.set('v', '<M-k>', ":'<,'>m '<-2<CR>gv=gv")
+vim.keymap.del('n', 'gc')
+vim.keymap.del('n', 'gb')
+
+wk.register {
+  gc = { name = 'Linewise Comment' },
+  gb = { name = 'Blockwise Comment' },
+}
 
 wk.register({
   q = { '<cmd>q<CR>', 'Quit' },
   w = { '<cmd>w<CR>', 'Save' },
   g = { name = 'Git' },
   l = { name = 'LSP' },
-  r = { '<cmd>edit<CR>', 'Refresh File'},
+  r = { '<cmd>edit<CR>', 'Refresh File' },
   s = { name = 'Search' },
   k = {
     name = 'Code Actions',
     c = {
-      "<cmd>silent !clang++ -Weverything -std=c++14 -o %:p:h/app %<CR>",
-      "Compile C++"
+      '<cmd>silent !clang++ -Weverything -std=c++14 -o %:p:h/app %<CR>',
+      'Compile C++',
     },
     d = {
-      "<cmd>silent !clang++ -Weverything -std=c++14 -g -o %:p:h/app %<CR>",
-      "Compile C++ Debug"
+      '<cmd>silent !clang++ -Weverything -std=c++14 -g -o %:p:h/app %<CR>',
+      'Compile C++ Debug',
     },
   },
   p = {
@@ -913,11 +923,9 @@ wk.register({
 
 -- CLEAN UP --
 --------------
-vim.api
-.
-nvim_create_autocmd({"VimLeavePre"}, {
-  pattern = {"*"},
-  command = "!eslint_d stop",
+vim.api.nvim_create_autocmd({ 'VimLeavePre' }, {
+  pattern = { '*' },
+  command = '!eslint_d stop',
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
