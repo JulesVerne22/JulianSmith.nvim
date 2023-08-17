@@ -884,13 +884,17 @@ wk.register({
   k = {
     name = 'Code Actions',
     c = {
-      '<cmd>silent !clang++ -Weverything -std=c++14 -o %:p:h/app %<CR>',
+      '<cmd>!clang++ -Wall -std=c++14 -Wextra -pedantic -o %:p:h/app %<CR>',
       'Compile C++',
     },
     d = {
-      '<cmd>silent !clang++ -Weverything -std=c++14 -g -o %:p:h/app %<CR>',
+      '<cmd>!clang++ -Wall -std=c++14 -Wextra -pedantic -g -o %:p:h/app %<CR>',
       'Compile C++ Debug',
     },
+    m = {
+      '<cmd>!make -C %:p:h<CR>',
+      'Run Make (Current Dir)'
+    }
   },
   p = {
     name = 'System Paste',
