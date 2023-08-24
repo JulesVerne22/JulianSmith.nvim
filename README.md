@@ -35,6 +35,8 @@ A NeoVim repo for perstisting my config.
 
 * Add Mason path to system path, generally ```~/.local/share/nvim/mason/bin```
 
+* Install sharkdp/fd for your specific OS
+
 ### Installation
 
 * From a terminal cd/dir to:
