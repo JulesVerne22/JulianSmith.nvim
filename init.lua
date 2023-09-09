@@ -546,6 +546,7 @@ vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', { desc = 'O
 -- [[ Configure ToggleTerm ]]
 function _G.set_terminal_keymaps()
   local opts = { buffer = 0 }
+  vim.keymap.set('t', '<esc>', "<esc>", opts)
   vim.keymap.set('t', '<C-[>', [[<C-\><C-n>]], opts)
   vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
 end
@@ -564,8 +565,9 @@ local lazygit = Terminal:new {
     width = 100000,
     height = 100000,
   },
-  on_open = function()
+  on_open = function(term)
     vim.cmd 'startinsert!'
+    vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", {noremap = true, silent = true})
   end,
   -- function to run on closing the terminal
   on_close = function() end,
