@@ -4,6 +4,19 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+function dump(o)
+  if type(o) == 'table' then
+    local s = '{ '
+    for k,v in pairs(o) do
+      if type(k) ~= 'number' then k = '"'..k..'"' end
+      s = s .. '['..k..'] = ' .. dump(v) .. ','
+    end
+    return s .. '} '
+  else
+    return tostring(o)
+  end
+end
+
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -153,7 +166,7 @@ require('lazy').setup({
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
-    main = "ibl",
+    main = 'ibl',
     opts = {
       indent = { char = '┇' },
     },
@@ -313,7 +326,18 @@ require('lazy').setup({
       'mfussenegger/nvim-dap',
     },
     opts = {
-      handlers = {},
+      handlers = {
+        function(config)
+          require('mason-nvim-dap').default_setup(config)
+        end,
+        codelldb = function(config)
+          config.configurations[1]["args"] = function()
+            local args_string = vim.fn.input("Input arguments: ")
+            return vim.split(args_string, " ")
+          end
+          require('mason-nvim-dap').default_setup(config)
+        end,
+      },
     },
   },
 }, {})
@@ -546,7 +570,7 @@ vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', { desc = 'O
 -- [[ Configure ToggleTerm ]]
 function _G.set_terminal_keymaps()
   local opts = { buffer = 0 }
-  vim.keymap.set('t', '<esc>', "<esc>", opts)
+  vim.keymap.set('t', '<esc>', '<esc>', opts)
   vim.keymap.set('t', '<C-[>', [[<C-\><C-n>]], opts)
   vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
 end
@@ -567,7 +591,7 @@ local lazygit = Terminal:new {
   },
   on_open = function(term)
     vim.cmd 'startinsert!'
-    vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", {noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(term.bufnr, 'n', 'q', '<cmd>close<CR>', { noremap = true, silent = true })
   end,
   -- function to run on closing the terminal
   on_close = function() end,
@@ -727,6 +751,7 @@ local on_attach = function(_, bufnr)
   nmap('<leader>lr', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>lc', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
+  nmap('gs', '<cmd>ClangdSwitchSourceHeader<cr>', 'Switch Source/Header (C/C++)')
   nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
   nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
@@ -895,8 +920,8 @@ wk.register({
     },
     m = {
       '<cmd>!make -C %:p:h<CR>',
-      'Run Make (Current Dir)'
-    }
+      'Run Make (Current Dir)',
+    },
   },
   p = {
     name = 'System Paste',
