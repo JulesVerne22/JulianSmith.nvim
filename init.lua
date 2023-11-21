@@ -7,15 +7,22 @@ vim.g.maplocalleader = ' '
 function dump(o)
   if type(o) == 'table' then
     local s = '{ '
-    for k,v in pairs(o) do
-      if type(k) ~= 'number' then k = '"'..k..'"' end
-      s = s .. '['..k..'] = ' .. dump(v) .. ','
+    for k, v in pairs(o) do
+      if type(k) ~= 'number' then
+        k = '"' .. k .. '"'
+      end
+      s = s .. '[' .. k .. '] = ' .. dump(v) .. ','
     end
     return s .. '} '
   else
     return tostring(o)
   end
 end
+
+local gwidth = vim.api.nvim_list_uis()[1].width
+local gheight = vim.api.nvim_list_uis()[1].height
+local width = 100
+local height = 20
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -282,6 +289,21 @@ require('lazy').setup({
         view = {
           number = true,
           relativenumber = true,
+          width = 40,
+          float = {
+            enable = true,
+            open_win_config = {
+              border = 'rounded',
+              relative = 'editor',
+              width = width,
+              height = height,
+              row = (gheight - height) * 0.4,
+              col = (gwidth - width) * 0.5,
+            },
+          },
+        },
+        filters = {
+          git_ignored = false,
         },
       }
     end,
@@ -331,9 +353,9 @@ require('lazy').setup({
           require('mason-nvim-dap').default_setup(config)
         end,
         codelldb = function(config)
-          config.configurations[1]["args"] = function()
-            local args_string = vim.fn.input("Input arguments: ")
-            return vim.split(args_string, " ")
+          config.configurations[1]['args'] = function()
+            local args_string = vim.fn.input 'Input arguments: '
+            return vim.split(args_string, ' ')
           end
           require('mason-nvim-dap').default_setup(config)
         end,
@@ -615,10 +637,40 @@ vim.api.nvim_set_keymap('n', '<M-3>', '<cmd>ToggleTerm 3 direction=float dir=%:p
 -- See `:help telescope` and `:help telescope.setup()`
 require('telescope').setup {
   defaults = {
+    vimgrep_arguments = {
+      'rg',
+      '--hidden',
+      '--color=never',
+      '--no-heading',
+      '--with-filename',
+      '--line-number',
+      '--column',
+      '--smart-case',
+      '-g',
+      '!**/.git/*',
+      '-g',
+      '!**/node_modules/*',
+      '-u',
+    },
     mappings = {
       i = {
         ['<C-u>'] = false,
         ['<C-d>'] = false,
+      },
+    },
+  },
+  pickers = {
+    find_files = {
+      hidden = true,
+      find_command = {
+        'rg',
+        '--files',
+        '--hidden',
+        '-g',
+        '!**/.git/*',
+        '-g',
+        '!**/node_modules/*',
+        '-u',
       },
     },
   },
@@ -639,7 +691,7 @@ vim.keymap.set('n', '<leader>/', function()
   })
 end, { desc = '[/] Fuzzily search in current buffer' })
 
--- vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
+vim.keymap.set('n', '<leader>sg', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 -- vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 -- vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
