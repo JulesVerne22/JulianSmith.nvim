@@ -508,9 +508,7 @@ null_ls.setup {
     null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.eslint_d,
     null_ls.builtins.formatting.stylua,
-    null_ls.builtins.formatting.clang_format.with {
-      extra_args = { '--style="{BasedOnStyle: llvm, IndentWidth: 4, TabWidth: 4}"' },
-    },
+    null_ls.builtins.formatting.clang_format,
   },
 }
 
