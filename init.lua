@@ -286,7 +286,7 @@ require('lazy').setup({
           relativenumber = true,
           width = 40,
           float = {
-            enable = true,
+            enable = false,
             open_win_config = function()
               local gwidth = vim.api.nvim_list_uis()[1].width
               local gheight = vim.api.nvim_list_uis()[1].height
