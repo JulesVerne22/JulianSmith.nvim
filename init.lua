@@ -21,8 +21,8 @@ end
 
 local gwidth = vim.api.nvim_list_uis()[1].width
 local gheight = vim.api.nvim_list_uis()[1].height
-local width = 100
-local height = 20
+local height = math.floor(gheight * 0.8)
+local width = math.floor(gwidth * 0.8)
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -297,7 +297,7 @@ require('lazy').setup({
               relative = 'editor',
               width = width,
               height = height,
-              row = (gheight - height) * 0.4,
+              row = (gheight - height) * 0.3,
               col = (gwidth - width) * 0.5,
             },
           },
