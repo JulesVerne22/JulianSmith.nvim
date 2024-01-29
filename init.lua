@@ -717,10 +717,7 @@ require('nvim-treesitter.configs').setup {
   autotag = {
     enable = true,
   },
-  context_commentstring = {
-    enable = true,
-    enable_autocmd = false,
-  },
+  enable_autocmd = false,
 
   highlight = { enable = true },
   indent = { enable = true },
