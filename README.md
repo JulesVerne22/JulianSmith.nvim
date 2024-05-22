@@ -12,7 +12,7 @@ A NeoVim repo for perstisting my config.
   - Ruby
   - PHP
   - luarocks
-  - nvm
+  - nvm (Optional if installing node)
   - Node
   - Cargo
   - Composer
@@ -21,7 +21,7 @@ A NeoVim repo for perstisting my config.
   - Pip3
   - Java
 
-* Install pynvim using ```pip3 install pynvim==0.4.3```
+* Install pynvim using ```pip3 install pynvim```
 
 * Install neovim on npm using ```npm install -g neovim```
 
@@ -31,7 +31,7 @@ A NeoVim repo for perstisting my config.
 
 * Possibly install tree-sitter-cli with ```cargo install tree-sitter-cli```
 
-* If on Linux use ```sudo apt install python3.10-venv``` to install formatters
+* If on Linux use ```sudo apt install python3.10-venv``` to install formatters (This needs fixed for new python version 3.12)
 
 * Add Mason path to system path, generally ```~/.local/share/nvim/mason/bin```
 
