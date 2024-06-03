@@ -254,7 +254,8 @@ require('lazy').setup({
   -- Virtual Environment selector for python
   {
     'linux-cultist/venv-selector.nvim',
-    dependencies = { 'neovim/nvim-lspconfig', 'nvim-telescope/telescope.nvim' },
+    dependencies = { 'neovim/nvim-lspconfig', 'nvim-telescope/telescope.nvim', 'mfussenegger/nvim-dap-python' },
+    branch = "regexp",
     opts = {
       name = { 'venv', '.venv' },
     },
