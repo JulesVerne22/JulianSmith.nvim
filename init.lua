@@ -1,23 +1,12 @@
+local masonPackages = require('mason-packages')
+local servers = masonPackages.servers
+local daps = masonPackages.daps
+local formattersAndLinters = masonPackages.formattersAndLinters
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
-
-function dump(o)
-  if type(o) == 'table' then
-    local s = '{ '
-    for k, v in pairs(o) do
-      if type(k) ~= 'number' then
-        k = '"' .. k .. '"'
-      end
-      s = s .. '[' .. k .. '] = ' .. dump(v) .. ','
-    end
-    return s .. '} '
-  else
-    return tostring(o)
-  end
-end
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -255,7 +244,7 @@ require('lazy').setup({
   {
     'linux-cultist/venv-selector.nvim',
     dependencies = { 'neovim/nvim-lspconfig', 'nvim-telescope/telescope.nvim', 'mfussenegger/nvim-dap-python' },
-    branch = "regexp",
+    branch = 'regexp',
     opts = {
       name = { 'venv', '.venv' },
     },
@@ -840,20 +829,6 @@ end
 --
 --  Add any additional override configuration in the following tables. They will be passed to
 --  the `settings` field of the server config. You must look up that documentation yourself.
-local servers = {
-  clangd = {},
-  gopls = {},
-  pyright = {},
-  rust_analyzer = {},
-  tsserver = {},
-
-  lua_ls = {
-    Lua = {
-      workspace = { checkThirdParty = false },
-      telemetry = { enable = false },
-    },
-  },
-}
 
 -- Setup neovim lua configuration
 require('neodev').setup {
@@ -881,12 +856,22 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
+-- Add Mason DAPs here to auto-install them
 require('mason-nvim-dap').setup {
-  ensure_installed = {
-    'delve',
-    'codelldb',
-  },
+  ensure_installed = daps,
 }
+
+-- Add any remaining Mason installs here, mainly formatters and linters
+local registry = require 'mason-registry'
+
+registry.refresh(function()
+  for _, pkg_name in ipairs(formattersAndLinters) do
+    local pkg = registry.get_package(pkg_name)
+    if not pkg:is_installed() then
+      pkg:install()
+    end
+  end
+end)
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
