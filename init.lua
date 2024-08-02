@@ -105,6 +105,10 @@ require('lazy').setup({
         align = 'center',
       },
     },
+    dependencies = {
+      -- icons
+      'echasnovski/mini.icons',
+    },
   },
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
@@ -445,29 +449,23 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- [[ Configure Debugger ]]
-wk.register {
-  ['<leader>d'] = {
-    name = 'Debug',
-    c = { '<cmd>DapContinue<CR>', 'Continue' },
-    o = { '<cmd>DapStepOver<CR>', 'Step Over' },
-    l = { '<cmd>DapStepInto<CR>', 'Step Into' },
-    h = { '<cmd>DapStepOut<CR>', 'Step Out' },
-    b = { '<cmd>DapToggleBreakpoint<CR>', 'Toggle Breakpoint' },
-    r = { '<cmd>DapToggleRepl<CR>', 'REPL' },
-    g = {
-      function()
-        require('dap-go').debug_test()
-      end,
-      'Debug Go Test',
-    },
-    q = { '<cmd>DapTerminate<CR>', 'Quit Debugger' },
-    s = {
-      function()
-        require('dapui').toggle()
-      end,
-      'Toggle Debug Window',
-    },
-  },
+wk.add {
+  { "<leader>d", group = "Debug" },
+  { "<leader>db", "<cmd>DapToggleBreakpoint<CR>", desc = "Toggle Breakpoint" },
+  { "<leader>dc", "<cmd>DapContinue<CR>", desc = "Continue" },
+  { "<leader>dg",
+    function()
+      require('dap-go').debug_test()
+    end, desc = "Debug Go Test" },
+  { "<leader>dh", "<cmd>DapStepOut<CR>", desc = "Step Out" },
+  { "<leader>dl", "<cmd>DapStepInto<CR>", desc = "Step Into" },
+  { "<leader>do", "<cmd>DapStepOver<CR>", desc = "Step Over" },
+  { "<leader>dq", "<cmd>DapTerminate<CR>", desc = "Quit Debugger" },
+  { "<leader>dr", "<cmd>DapToggleRepl<CR>", desc = "REPL" },
+  { "<leader>ds",
+    function()
+      require('dapui').toggle()
+    end, desc = "Toggle Debug Window" },
 }
 
 local dap, dapui = require 'dap', require 'dapui'
@@ -513,18 +511,16 @@ null_ls.setup {
 -- [[ Configure bufferline ]]
 require('bufferline').setup {}
 
-wk.register({
-  b = {
-    name = 'Buffer',
-    b = { '<cmd>BufferLineCyclePrev<CR>', 'Previous Tab' },
-    n = { '<cmd>BufferLineCycleNext<CR>', 'Next Tab' },
-    j = { '<cmd>BufferLinePick<CR>', 'Jump to Buffer' },
-    o = { '<cmd>BufferLineCloseLeft<CR><cmd>BufferLineCloseRight<CR>', 'Close All Other Tabs' },
-    v = { '<C-w>v', 'Split Vertical' },
-    h = { '<C-w>s', 'Split Horizontal' },
-  },
-  c = { '<cmd>bdelete! %<CR>', 'Close Tab' },
-}, { prefix = '<leader>' })
+wk.add({
+  { "<leader>b", group = "Buffer" },
+  { "<leader>bb", "<cmd>BufferLineCyclePrev<CR>", desc = "Previous Tab" },
+  { "<leader>bh", "<C-w>s", desc = "Split Horizontal" },
+  { "<leader>bj", "<cmd>BufferLinePick<CR>", desc = "Jump to Buffer" },
+  { "<leader>bn", "<cmd>BufferLineCycleNext<CR>", desc = "Next Tab" },
+  { "<leader>bo", "<cmd>BufferLineCloseLeft<CR><cmd>BufferLineCloseRight<CR>", desc = "Close All Other Tabs" },
+  { "<leader>bv", "<C-w>v", desc = "Split Vertical" },
+  { "<leader>c", "<cmd>bdelete! %<CR>", desc = "Close Tab" },
+})
 
 -- [[ Configure nvim-tree ]]
 -- vim.api.nvim_create_autocmd({ "VimEnter" }, {
@@ -533,27 +529,20 @@ wk.register({
 -- })
 
 -- [[ Condfigure trevj ]]
-wk.register {
-  ['<leader>j'] = {
-    function()
-      require('trevj').format_at_cursor()
-    end,
-    'Create Line Breaks',
-  },
-}
+wk.add({
+  { "<leader>j", function() require('trevj').format_at_cursor() end, desc = "Create line Breaks" },
+})
 
 -- [[ Configure harpoon ]]
 local mark = require 'harpoon.mark'
 local ui = require 'harpoon.ui'
 
-wk.register {
-  ['<leader>h'] = {
-    name = 'Harpoon/Highlighting',
-    a = { mark.add_file, 'Add File to Harpoon' },
-    e = { ui.toggle_quick_menu, 'Harpoon Explorer' },
-    h = { '<cmd>noh<CR>', 'Remove Highlighting' },
-  },
-}
+wk.add({
+  { "<leader>h", group = "Harpoon/Highlighting" },
+  { "<leader>ha", mark.add_file, desc = "Add File to Harpoon" },
+  { "<leader>he", ui.toggle_quick_menu, desc = "Harpoon Explorer" },
+  { "<leader>hh", "<cmd>noh<CR>", desc = "Remove Highlighting" },
+})
 
 vim.keymap.set('n', '<C-h>', function()
   ui.nav_file(1)
@@ -563,24 +552,20 @@ vim.keymap.set('n', '<C-t>', function()
 end)
 
 -- [[ Configure markdown-preview ]]
-wk.register({
-  m = {
-    name = 'Markdown',
-    p = { '<Plug>MarkdownPreview', 'Markdown Preview' },
-    s = { '<Plug>MarkdownPreviewStop', 'Markdown Preview Stop' },
-  },
-}, { prefix = '<leader>' })
+wk.add({
+  { "<leader>m", group = "Markdown" },
+  { "<leader>mp", "<Plug>MarkdownPreview", desc = "Markdown Preview" },
+  { "<leader>ms", "<Plug>MarkdownPreviewStop", desc = "Markdown Preview Stop" },
+})
 
 -- [[ Configure persistence ]]
-wk.register({
-  S = {
-    name = 'Sessions',
-    c = { "<cmd>lua require('persistence').load()<cr>", 'Restore last session for current dir' },
-    l = { "<cmd>lua require('persistence').load({ last = true })<cr>", 'Restore last session' },
-    q = { '<cmd>qa<cr>', 'Quit with saving' },
-    Q = { "<cmd>lua require('persistence').stop()<cr>", 'Quit without saving session' },
-  },
-}, { prefix = '<leader>' })
+wk.add({
+  { "<leader>S", group = "Sessions" },
+  { "<leader>SQ", "<cmd>lua require('persistence').stop()<cr>", desc = "Quit without saving session" },
+  { "<leader>Sc", "<cmd>lua require('persistence').load()<cr>", desc = "Restore last session for current dir" },
+  { "<leader>Sl", "<cmd>lua require('persistence').load({ last = true })<cr>", desc = "Restore last session" },
+  { "<leader>Sq", "<cmd>qa<cr>", desc = "Quit with saving" },
+})
 
 -- [[ Configure NvimTree ]]
 vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', { desc = 'Open File Tree' })
@@ -937,61 +922,43 @@ vim.keymap.set('v', '<M-k>', ":'<,'>m '<-2<CR>gv=gv")
 vim.keymap.del('n', 'gc')
 vim.keymap.del('n', 'gb')
 
-wk.register {
-  gc = { name = 'Linewise Comment' },
-  gb = { name = 'Blockwise Comment' },
+wk.add {
+  { "gb", group = 'Blockwise Comment' },
+  { "gc", group = 'Linewise Comment' },
 }
 
-wk.register({
-  q = { '<cmd>q<CR>', 'Quit' },
-  w = { '<cmd>w<CR>', 'Save' },
-  g = { name = 'Git' },
-  l = { name = 'LSP' },
-  r = { '<cmd>edit<CR>', 'Refresh File' },
-  s = { name = 'Search' },
-  k = {
-    name = 'Code Actions',
-    c = {
-      '<cmd>!clang++ -Wall -std=c++14 -Wextra -pedantic -o %:p:h/app %<CR>',
-      'Compile C++',
-    },
-    d = {
-      '<cmd>!clang++ -Wall -std=c++14 -Wextra -pedantic -g -o %:p:h/app %<CR>',
-      'Compile C++ Debug',
-    },
-    m = {
-      '<cmd>!make -C %:p:h<CR>',
-      'Run Make (Current Dir)',
-    },
-  },
-  p = {
-    name = 'System Paste',
-    p = { '"+p', 'System Paste Below' },
-    P = { '"+P', 'System Paste Above' },
-    v = { '<cmd>Ex<CR>', 'View Files' },
-  },
-  y = {
-    name = 'System Yank',
-    y = { '"+y', 'System Yank' },
-    Y = { '"+Y', 'System Yank Entire Line' },
-  },
-  v = { '"_d', 'Void Delete' },
-  x = { '<cmd>!chmod +x %<CR>', 'Make Executable' },
-}, { prefix = '<leader>' })
+wk.add({
+  { "<leader>g", group = "Git" },
+  { "<leader>k", group = "Code Actions" },
+  { "<leader>kc", "<cmd>!clang++ -Wall -std=c++14 -Wextra -pedantic -o %:p:h/app %<CR>", desc = "Compile C++" },
+  { "<leader>kd", "<cmd>!clang++ -Wall -std=c++14 -Wextra -pedantic -g -o %:p:h/app %<CR>", desc = "Compile C++ Debug" },
+  { "<leader>km", "<cmd>!make -C %:p:h<CR>", desc = "Run Make (Current Dir)" },
+  { "<leader>l", group = "LSP" },
+  { "<leader>p", group = "System Paste" },
+  { "<leader>pP", '"+P', desc = "System Paste Above" },
+  { "<leader>pp", '"+p', desc = "System Paste Below" },
+  { "<leader>pv", "<cmd>Ex<CR>", desc = "View Files" },
+  { "<leader>q", "<cmd>q<CR>", desc = "Quit" },
+  { "<leader>r", "<cmd>edit<CR>", desc = "Refresh File" },
+  { "<leader>s", group = "Search" },
+  { "<leader>v", '"_d', desc = "Void Delete" },
+  { "<leader>w", "<cmd>w<CR>", desc = "Save" },
+  { "<leader>x", "<cmd>!chmod +x %<CR>", desc = "Make Executable" },
+  { "<leader>y", group = "System Yank" },
+  { "<leader>yY", '"+Y', desc = "System Yank Entire Line" },
+  { "<leader>yy", '"+y', desc = "System Yank" },
+})
 
-wk.register({
-  p = {
-    name = 'System Paste',
-    d = { '"_dP', 'Delete to Void Paste', mode = 'x' },
-    mode = 'x',
+wk.add({
+  {
+    mode = { "v" },
+    { "<leader>v", '"_d', desc = "Void Delete" },
+    { "<leader>y", group = "System Yank" },
+    { "<leader>yy", '"+y', desc = "System Yank" },
   },
-  y = {
-    name = 'System Yank',
-    y = { '"+y', 'System Yank' },
-    mode = 'v',
-  },
-  v = { '"_d', 'Void Delete', mode = 'v' },
-}, { prefix = '<leader>' })
+  { "<leader>p", group = "System Paste", mode = "x" },
+  { "<leader>pd", '"_dp', desc = "Delete to Void Paste", mode = "x" },
+})
 
 -- CLEAN UP --
 --------------
