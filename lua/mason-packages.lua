@@ -5,7 +5,11 @@ return {
         gopls = {},
         pyright = {},
         rust_analyzer = {},
-        tsserver = {},
+        ts_ls = {},
+        bashls = {},
+        -- helm_ls = {},
+        -- tflint = {},
+        -- terraformls = {},
 
         lua_ls = {
             Lua = {
