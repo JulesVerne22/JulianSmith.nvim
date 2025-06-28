@@ -238,10 +238,13 @@ require('lazy').setup({
 
   -- Markdown preview
   {
-    'iamcco/markdown-preview.nvim',
-    build = function()
-      vim.fn['mkdp#util#install']()
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    build = "cd app && yarn install",
+    init = function()
+      vim.g.mkdp_filetypes = { "markdown" }
     end,
+    ft = { "markdown" },
   },
 
   -- Virtual Environment selector for python
@@ -315,10 +318,6 @@ require('lazy').setup({
   },
 
   -- Extend LSP with formatters and linters
-  {
-    'JulesVerne22/null-ls.nvim',
-    dependencies = 'nvim-lua/plenary.nvim',
-  },
 
   -- Adding debugger
   {
@@ -487,25 +486,6 @@ require('lspconfig').ts_ls.setup {
   on_attach = function(client)
     client.resolved_capabilities.document_formatting = false
   end,
-}
-
-local null_ls = require 'null-ls'
-null_ls.setup {
-  sources = {
-    null_ls.builtins.diagnostics.eslint_d,
-    null_ls.builtins.diagnostics.flake8.with {
-      extra_args = { '--extend-ignore', 'E501' },
-    },
-    null_ls.builtins.formatting.black.with {
-      extra_args = { '--fast' },
-    },
-    null_ls.builtins.formatting.gofumpt,
-    null_ls.builtins.formatting.prettier,
-    null_ls.builtins.formatting.eslint_d,
-    null_ls.builtins.formatting.stylua,
-    null_ls.builtins.formatting.clang_format,
-    null_ls.builtins.diagnostics.commitlint,
-  },
 }
 
 -- [[ Configure bufferline ]]
@@ -829,16 +809,6 @@ local mason_lspconfig = require 'mason-lspconfig'
 
 mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
-}
-
-mason_lspconfig.setup_handlers {
-  function(server_name)
-    require('lspconfig')[server_name].setup {
-      capabilities = capabilities,
-      on_attach = on_attach,
-      settings = servers[server_name],
-    }
-  end,
 }
 
 -- Add Mason DAPs here to auto-install them
